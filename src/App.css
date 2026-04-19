@@ -1,0 +1,361 @@
+/* 🌍 BASE */
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: #F9F7F2;
+  color: #2D3436;
+}
+
+/* 📐 LAYOUT */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 📌 SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: #ffffff;
+  border-right: 1px solid #E2E8F0;
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+/* LOGO */
+.logo {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo-icon {
+  font-size: 32px;
+  color: #26DE81;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.logo h2 {
+  margin: 0 0 4px 0;
+  color: #1A4D2E;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logo p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  opacity: 0.8;
+}
+
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #2D3436;
+  transition: 0.2s;
+}
+
+.nav-item:hover {
+  background: #E6F7EF;
+}
+
+.nav-item.active {
+  background: #26DE81;
+  color: white;
+}
+
+.nav-item svg {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* 📄 MAIN */
+.main-content {
+  flex: 1;
+  padding: 32px;
+}
+
+/* 📦 CARD */
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+/* 🌱 ECO SUMMARY */
+.summary-title {
+  color: #1A4D2E;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.summary-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #26DE81;
+}
+
+/* 📋 LOG ITEM */
+.log-item {
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.log-item:hover {
+  background: #F0FFF6;
+}
+
+/* ✏️ INPUT */
+.input {
+  border: 1px solid #E2E8F0;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.input:focus {
+  border-color: #26DE81;
+  outline: none;
+}
+
+.auth-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-box {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.full {
+  width: 100%;
+}
+.button {
+  background: #26DE81;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(38, 222, 129, 0.25);
+}
+
+/* Click (tactile feel) */
+.button:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* EDIT BUTTON */
+.edit-btn {
+  background: white;
+  border: 1px solid #2D3436;
+  color: #2D3436;
+}
+
+/* Delete button */
+.delete-btn {
+  background: #FC5C65;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(252, 92, 101, 0.25);
+}
+
+.delete-btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+.log-actions {
+  display: flex;
+  gap: 10px; /* 👈 THIS creates space between buttons */
+}
+.input {
+  width: 100%;
+  box-sizing: border-box; /* 🔥 THIS FIXES OVERFLOW */
+}
+.full {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* CENTER PAGE */
+.page-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* CARD */
+.form-card {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 30px;
+}
+
+/* TEXT */
+.form-title {
+  font-size: 22px;
+  margin-bottom: 6px;
+  color: #2d3436;
+}
+
+.form-subtitle {
+  font-size: 14px;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+/* TRANSPORT BUTTONS */
+.transport-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.transport-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.transport-btn.active {
+  border-color: #26de81;
+  background: #26de81;
+  color: white;
+}
+
+/* INPUT */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: #26de81;
+}
+
+/* BUTTON */
+.form-button {
+  width: 100%;
+  padding: 12px;
+  background: #26de81;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-button:active {
+  transform: translateY(2px);
+}
+.form-card {
+  max-width: 600px;
+  margin: auto;
+}
+
+.subtext {
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+/* Transport buttons */
+.transport-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.transport-buttons button {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #E2E8F0;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.transport-buttons button.active {
+  background: #26DE81;
+  color: white;
+  border: none;
+}
+
+/* 🔥 THIS FIXES YOUR ISSUE */
+.full-width {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* Space between transport buttons and input */
+.transport-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;   /* ⬅️ increase this */
+}
+
+/* Input spacing */
+.input.full-width {
+  margin-bottom: 18px;   /* ⬅️ adds gap below input */
+}
+
+/* Button spacing */
+.button.full-width {
+  margin-top: 4px;       /* ⬅️ slight breathing space */
+}
