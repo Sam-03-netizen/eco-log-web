@@ -32,7 +32,7 @@ export default function Sidebar() {
           <span>Analytics</span>
         </NavLink>
 
-      </nav>
+        </nav>
     </div>
   );
 }

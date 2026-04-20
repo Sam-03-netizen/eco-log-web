@@ -5,7 +5,6 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import AddLog from "./pages/AddLog";
 import Analytics from "./pages/Analytics";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 

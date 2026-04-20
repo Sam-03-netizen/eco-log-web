@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../services/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 import {
   BarChart,
@@ -17,14 +17,14 @@ export default function Analytics() {
   const { user } = useAuth();
   const [data, setData] = useState([]);
 
-  const emissionFactors = {
-    car: 0.21,
-    bus: 0.1,
-    bike: 0,
-  };
-
   useEffect(() => {
     if (!user) return;
+
+    const emissionFactors = {
+      car: 0.21,
+      bus: 0.1,
+      bike: 0,
+    };
 
     const q = query(
       collection(db, "logs"),
@@ -62,9 +62,10 @@ export default function Analytics() {
       : null;
 
   return (
-    <div className="container">
+    <div className="main-content">
+      <div className="container">
 
-      <div className="card">
+        <div className="card">
         <h2>📊 Your Carbon Breakdown</h2>
         <p className="hint">
           See which activities contribute most to your emissions.
@@ -101,5 +102,6 @@ export default function Analytics() {
 
       </div>
     </div>
-  );
+  </div>
+);
 }

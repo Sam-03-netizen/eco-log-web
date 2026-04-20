@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { db } from "../services/firebase";
 import {
   collection,
@@ -8,12 +8,18 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [logs, setLogs] = useState([]);
+
+  const [userData, setUserData] = useState({
+    totalXP: 0,
+    currentStreak: 0,
+  });
 
   const emissionFactors = {
     car: 0.21,
@@ -21,12 +27,7 @@ export default function Dashboard() {
     bike: 0,
   };
 
-  const transportIcons = {
-    car: "🚗",
-    bus: "🚌",
-    bike: "🚲",
-  };
-
+  // 🔥 logs
   useEffect(() => {
     if (!user) return;
 
@@ -46,13 +47,42 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, [user]);
 
+  // 🔥 user data
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchUser = async () => {
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) setUserData(snap.data());
+    };
+
+    fetchUser();
+  }, [user]);
+
+  // 🌍 CO2
+  const totalCO2 = useMemo(() => {
+    return logs.reduce((sum, log) => {
+      return sum + log.value * (emissionFactors[log.type] || 0);
+    }, 0);
+  }, [logs, emissionFactors]);
+
+  // 🌱 LEVEL
+  const getLevel = (xp) => {
+    if (xp < 500) return "🌱 Seedling";
+    if (xp < 1500) return "🌿 Sapling";
+    if (xp < 3000) return "🌳 Tree";
+    return "🌍 Rainforest";
+  };
+
+  // 🗑️ delete
   const handleDelete = async (id) => {
     await deleteDoc(doc(db, "logs", id));
   };
 
+  // ✏️ edit
   const handleEdit = async (log) => {
-    const newType = prompt("Transport type (car, bus, bike):", log.type);
-    const newValue = prompt("Distance (km):", log.value);
+    const newType = prompt("Type:", log.type);
+    const newValue = prompt("Distance:", log.value);
 
     if (!newType || !newValue) return;
 
@@ -62,39 +92,81 @@ export default function Dashboard() {
     });
   };
 
-  const totalCO2 = logs.reduce((sum, log) => {
-    const factor = emissionFactors[log.type] || 0;
-    return sum + log.value * factor;
-  }, 0);
-
   return (
-    <div className="container">
+    <div className="main-content">
+      <div className="container">
 
-      {/* 🌱 App Meaning */}
-      <p className="subtitle">
-        Track your daily travel and understand your carbon footprint 🌍
-      </p>
+        {/* HEADER */}
+        <p style={{ opacity: 0.7, marginBottom: "20px" }}>
+          Track your travel and improve your environmental impact 🌍
+        </p>
 
-      {/* 🌿 Summary */}
-      <div className="card">
-        <h2 className="summary-title">🌱 Your Carbon Impact Today</h2>
+        <p style={{
+          fontWeight: "500",
+          marginBottom: "15px"
+        }}>
+          Your travel choices directly impact your carbon footprint 🌍
+        </p>
 
-        <div className="summary-value">
-          {totalCO2.toFixed(2)} kg CO₂
+        {/* STATS GRID */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+        gap: "16px",
+        marginBottom: "20px"
+      }}>
+
+        <div className="card">
+          <div className="summary-title">🌱 Carbon</div>
+          <div className="summary-value">
+            {totalCO2.toFixed(2)} kg
+          </div>
+          <p style={{ fontSize: "13px", opacity: 0.6 }}>
+            Lower is better 👍
+          </p>
         </div>
 
-        <p className="hint">
-          This is the total carbon emitted based on your travel today.
-        </p>
+        <div className="card">
+          <div className="summary-title">🔥 Streak</div>
+          <div className="summary-value">
+            {userData.currentStreak === 0
+              ? "Start 🚀"
+              : `${userData.currentStreak} days`}
+          </div>
+          <p style={{ fontSize: "13px", opacity: 0.6 }}>
+            Daily consistency matters
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="summary-title">⚡ Eco Score</div>
+          <div className="summary-value">
+            {userData.totalXP}
+          </div>
+          <p style={{ fontSize: "13px", opacity: 0.6 }}>
+            Earn points for eco-friendly travel
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="summary-title">🌿 Eco Level</div>
+          <div className="summary-value">
+            {getLevel(userData.totalXP)}
+          </div>
+          <p style={{ fontSize: "13px", opacity: 0.6 }}>
+            Your sustainability level
+          </p>
+        </div>
+
       </div>
 
-      {/* 📋 Logs */}
+      {/* LOGS */}
       <div className="card">
-        <h3>Your Activities</h3>
+        <h3 style={{ marginBottom: "15px" }}>Your Activities</h3>
 
         {logs.length === 0 ? (
-          <p className="empty-text">
-            No activities yet. Start by logging your travel 🚀
+          <p style={{ opacity: 0.6 }}>
+            No activities yet. Start tracking 🚀
           </p>
         ) : (
           logs.map((log) => {
@@ -102,21 +174,28 @@ export default function Dashboard() {
               log.value * (emissionFactors[log.type] || 0);
 
             return (
-              <div key={log.id} className="log-item">
-                <span>
-                  {transportIcons[log.type] || "❓"}{" "}
-                  <strong>{log.type}</strong> • {log.value} km
-                  <br />
-                  <small>
-                    {co2 === 0
-                      ? "0 kg CO₂ (Great choice 🌱)"
-                      : `${co2.toFixed(2)} kg CO₂`}
-                  </small>
-                </span>
+              <div
+                key={log.id}
+                className="log-item"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "10px",
+                }}
+              >
+                <div>
+                  <strong>
+                    {log.type} • {log.value} km
+                  </strong>
+                  <div style={{ opacity: 0.6, fontSize: "13px" }}>
+                    {co2.toFixed(2)} kg CO₂
+                  </div>
+                </div>
 
-                <div className="log-actions">
+                <div style={{ display: "flex", gap: "10px" }}>
                   <button
-                    className="button small"
+                    className="button"
                     onClick={() => handleEdit(log)}
                   >
                     Edit
@@ -133,6 +212,8 @@ export default function Dashboard() {
             );
           })
         )}
+      </div>
+
       </div>
     </div>
   );
